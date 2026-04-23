@@ -3,242 +3,227 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>price-monitoring-report-service | Portfolio Case Study</title>
+  <title>price-monitoring-report-service | Case Study</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@400;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-1: #f1f8f6;
-      --bg-2: #e7f1ff;
-      --ink: #0f1e2a;
-      --muted: #3f4f60;
-      --card: rgba(255, 255, 255, 0.82);
-      --line: rgba(15, 30, 42, 0.12);
-      --accent: #0d9488;
-      --accent-2: #dc6803;
-      --shadow: 0 18px 40px rgba(15, 30, 42, 0.12);
+      --ink: #0f172a;
+      --muted: #334155;
+      --card: rgba(255,255,255,0.82);
+      --line: rgba(15,23,42,0.14);
+      --shadow: 0 20px 45px rgba(15, 23, 42, 0.13);
       --radius: 18px;
+      --accent: #0d9488;
+      --accent2: #ea580c;
+      --bgA: #eff8f5;
+      --bgB: #e7eefb;
+      --font-main: "Sora", "Segoe UI", sans-serif;
     }
+
+    body.theme-growth { --accent:#15803d; --accent2:#d97706; --bgA:#f3fbe8; --bgB:#fff7e8; --font-main:"Space Grotesk", "Sora", sans-serif; }
+    body.theme-local { --accent:#0f766e; --accent2:#0369a1; --bgA:#e9f8f4; --bgB:#eaf4ff; --font-main:"Manrope", "Sora", sans-serif; }
+    body.theme-workspace { --accent:#0f172a; --accent2:#9a3412; --bgA:#f7f7f7; --bgB:#f2efe9; --font-main:"IBM Plex Mono", "Sora", monospace; }
+    body.theme-social { --accent:#be123c; --accent2:#ea580c; --bgA:#fff1f2; --bgB:#fff7ed; --font-main:"Sora", sans-serif; }
+    body.theme-media { --accent:#0369a1; --accent2:#0f766e; --bgA:#eaf4ff; --bgB:#e6f8f4; --font-main:"Space Grotesk", sans-serif; }
+    body.theme-governance { --accent:#1e3a8a; --accent2:#0f766e; --bgA:#edf2ff; --bgB:#e8f5f1; --font-main:"Fraunces", "Sora", serif; }
+    body.theme-finance { --accent:#047857; --accent2:#b45309; --bgA:#ecfdf5; --bgB:#fffbeb; --font-main:"Manrope", sans-serif; }
+    body.theme-studio { --accent:#0f172a; --accent2:#be123c; --bgA:#f8fafc; --bgB:#fff1f2; --font-main:"Sora", sans-serif; }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
+      font-family: var(--font-main);
       color: var(--ink);
-      background: radial-gradient(1400px 600px at -10% -10%, #d8f0e8 10%, transparent 55%),
-                  radial-gradient(900px 520px at 100% 0%, #dce9ff 10%, transparent 55%),
-                  linear-gradient(165deg, var(--bg-1), var(--bg-2));
-      font-family: "Sora", "Segoe UI", sans-serif;
+      background: linear-gradient(150deg, var(--bgA), var(--bgB));
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
     }
 
-    .orb {
+    body::before,
+    body::after {
+      content: "";
       position: fixed;
       border-radius: 999px;
-      filter: blur(2px);
-      opacity: 0.26;
       z-index: 0;
-      animation: float 12s ease-in-out infinite;
       pointer-events: none;
+      opacity: 0.22;
+      animation: drift 11s ease-in-out infinite;
     }
 
-    .orb.a { width: 220px; height: 220px; background: #7dd3fc; top: 8%; left: -60px; }
-    .orb.b { width: 180px; height: 180px; background: #86efac; top: 58%; right: -40px; animation-delay: -4s; }
-    .orb.c { width: 140px; height: 140px; background: #fdba74; top: 78%; left: 20%; animation-delay: -8s; }
+    body::before { width: 260px; height: 260px; top: 6%; left: -80px; background: var(--accent); }
+    body::after { width: 220px; height: 220px; bottom: 8%; right: -70px; background: var(--accent2); animation-delay: -4s; }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      50% { transform: translateY(-18px) translateX(8px); }
+    @keyframes drift {
+      0%,100% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-18px) translateX(9px); }
     }
 
-    .wrap {
+    .layout {
       position: relative;
       z-index: 1;
-      width: min(1080px, 92vw);
-      margin: 28px auto 64px;
+      width: min(1120px, 92vw);
+      margin: 30px auto 64px;
     }
 
-    .topbar {
+    .header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-bottom: 14px;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    .pill {
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.7);
       border-radius: 999px;
-      padding: 7px 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.72);
       font-size: 12px;
       color: var(--muted);
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
       backdrop-filter: blur(8px);
     }
 
-    .badge .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 0 6px rgba(13,148,136,0.12); }
-
-    .links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--accent);
+      box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 20%, transparent);
     }
 
+    .linkbar { display: flex; gap: 8px; flex-wrap: wrap; }
     .btn {
+      text-decoration: none;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.82);
       border-radius: 12px;
       padding: 8px 12px;
       font-size: 13px;
       color: var(--ink);
-      text-decoration: none;
+      background: rgba(255,255,255,0.78);
       transition: transform .18s ease, box-shadow .18s ease;
       backdrop-filter: blur(8px);
     }
 
-    .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(15,30,42,0.12); }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(15,23,42,0.12); }
 
     .hero {
       border: 1px solid var(--line);
-      background: linear-gradient(145deg, rgba(255,255,255,0.88), rgba(255,255,255,0.72));
-      border-radius: var(--radius);
-      padding: 26px;
+      background: linear-gradient(140deg, rgba(255,255,255,0.9), rgba(255,255,255,0.74));
+      border-radius: 22px;
       box-shadow: var(--shadow);
-      position: relative;
+      padding: 26px;
       overflow: hidden;
+      position: relative;
     }
 
     .hero::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.35) 40%, transparent 75%);
-      transform: translateX(-120%);
-      animation: sheen 5s ease-in-out infinite;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.34) 40%, transparent 75%);
+      transform: translateX(-130%);
+      animation: sheen 5.5s ease-in-out infinite;
       pointer-events: none;
     }
 
     @keyframes sheen {
-      0%, 80%, 100% { transform: translateX(-120%); }
-      45% { transform: translateX(120%); }
+      0%, 80%, 100% { transform: translateX(-130%); }
+      45% { transform: translateX(130%); }
     }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(1.9rem, 3.3vw, 2.8rem);
-      letter-spacing: -0.02em;
-      line-height: 1.04;
-    }
+    h1 { margin: 0; font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: -0.02em; }
+    .subtitle { margin-top: 10px; color: var(--muted); max-width: 800px; line-height: 1.58; }
 
-    .subtitle {
-      margin-top: 12px;
-      color: var(--muted);
-      max-width: 760px;
-      line-height: 1.6;
-      font-size: 1rem;
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .chip {
+      border: 1px solid color-mix(in srgb, var(--accent) 26%, var(--line));
+      background: color-mix(in srgb, var(--accent) 10%, white);
+      color: color-mix(in srgb, var(--accent) 80%, black);
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 600;
     }
 
     .stats {
-      margin-top: 18px;
+      margin-top: 16px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       gap: 10px;
     }
 
     .stat {
-      background: rgba(255,255,255,0.72);
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 12px;
+      background: rgba(255,255,255,0.72);
     }
 
-    .stat .k { font-size: 1.2rem; font-weight: 700; }
-    .stat .l { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .stat .k { font-size: 1.15rem; font-weight: 800; }
+    .stat .l { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-    .section-grid {
+    .grid {
+      margin-top: 14px;
       display: grid;
       grid-template-columns: 1.2fr 1fr;
       gap: 14px;
-      margin-top: 14px;
     }
 
     .card {
       border: 1px solid var(--line);
-      background: var(--card);
       border-radius: var(--radius);
-      padding: 18px;
+      background: var(--card);
       box-shadow: var(--shadow);
+      padding: 18px;
       backdrop-filter: blur(8px);
       animation: rise .55s ease both;
     }
 
-    .card:nth-child(2) { animation-delay: .08s; }
-    .card:nth-child(3) { animation-delay: .14s; }
-    .card:nth-child(4) { animation-delay: .2s; }
+    .card:nth-child(2) { animation-delay: .06s; }
+    .card:nth-child(3) { animation-delay: .12s; }
+    .card:nth-child(4) { animation-delay: .18s; }
 
     @keyframes rise {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    h2 {
-      margin: 0 0 10px;
-      font-size: 1.02rem;
-      letter-spacing: -0.01em;
-    }
+    h2 { margin: 0 0 10px; font-size: 1.06rem; }
+    p { margin: 0 0 10px; color: var(--muted); line-height: 1.56; }
 
-    p {
-      margin: 0 0 10px;
-      color: var(--muted);
-      line-height: 1.55;
-      font-size: .95rem;
-    }
-
-    .mono {
-      font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: .83rem;
-    }
+    .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .84rem; }
 
     pre {
       margin: 0;
-      border: 1px solid #1f3346;
       border-radius: 12px;
-      background: #0f1f2e;
-      color: #d8e6f7;
+      border: 1px solid #1f3346;
+      background: #0f1f2f;
+      color: #dde9f8;
       padding: 12px;
       overflow: auto;
     }
 
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-      gap: 8px;
-    }
+    .toolrow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 
-    .copy {
-      border: 1px solid rgba(255,255,255,0.35);
-      background: rgba(255,255,255,0.08);
-      color: #e5f2ff;
+    .copy-btn {
+      border: 1px solid rgba(255,255,255,0.34);
       border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      color: #e5effd;
       padding: 5px 10px;
-      cursor: pointer;
       font-size: 12px;
+      cursor: pointer;
     }
 
-    .step-list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 8px;
-    }
-
+    .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
     .step {
       border: 1px solid var(--line);
       border-radius: 12px;
@@ -246,107 +231,104 @@
       background: rgba(255,255,255,0.62);
     }
 
-    .step .n {
-      display: inline-grid;
-      place-items: center;
+    .step .num {
       width: 22px;
       height: 22px;
-      border-radius: 999px;
+      border-radius: 99px;
+      display: inline-grid;
+      place-items: center;
       background: var(--accent);
       color: white;
       font-size: 12px;
-      margin-right: 8px;
       font-weight: 700;
+      margin-right: 8px;
     }
 
-    .doc-links, .artifact-list { margin: 0; padding-left: 18px; }
-    .doc-links li, .artifact-list li { margin: 6px 0; }
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    a:hover { text-decoration: underline; }
+    .docs, .artifacts { margin: 0; padding-left: 18px; }
+    .docs li, .artifacts li { margin: 6px 0; }
 
     .search {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 10px 12px;
-      background: rgba(255,255,255,0.78);
-      font: inherit;
+      background: rgba(255,255,255,0.8);
       color: var(--ink);
+      font: inherit;
       margin-bottom: 10px;
     }
 
-    .search:focus { outline: 2px solid rgba(13,148,136,0.25); border-color: var(--accent); }
+    .search:focus { outline: 2px solid color-mix(in srgb, var(--accent) 24%, transparent); border-color: var(--accent); }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
     .footer {
       margin-top: 14px;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.7);
       border-radius: 14px;
       padding: 12px;
+      background: rgba(255,255,255,0.74);
       color: var(--muted);
       font-size: 13px;
     }
 
-    @media (max-width: 860px) {
-      .section-grid { grid-template-columns: 1fr; }
-      .topbar { flex-direction: column; align-items: flex-start; gap: 10px; }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .header { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
-<body>
-  <div class="orb a"></div>
-  <div class="orb b"></div>
-  <div class="orb c"></div>
-
-  <main class="wrap">
-    <header class="topbar">
-      <div class="badge"><span class="dot"></span>Portfolio Case Study</div>
-      <div class="links">
-        <a class="btn" href="https://github.com/igor-kan/price-monitoring-report-service" target="_blank" rel="noreferrer">GitHub Repo</a>
-        <a class="btn" href="https://igor-kan.github.io/price-monitoring-report-service/">Live Demo URL</a>
+<body class="theme-finance">
+  <main class="layout">
+    <header class="header">
+      <div class="pill"><span class="dot"></span>Revenue Intelligence</div>
+      <div class="linkbar">
+        <a class="btn" href="https://github.com/igor-kan/price-monitoring-report-service" target="_blank" rel="noreferrer">Repository</a>
+        <a class="btn" href="https://igor-kan.github.io/price-monitoring-report-service/">Live Link</a>
       </div>
     </header>
 
     <section class="hero">
       <h1>price-monitoring-report-service</h1>
       <p class="subtitle">Price delta monitoring and weekly reporting generator.</p>
+      <div class="chips">
+        <span class="chip">Monitoring + Alerts</span>
+        <span class="chip">CI Verified</span>
+        <span class="chip">Docs + Samples</span>
+      </div>
       <div class="stats">
         <div class="stat"><div class="k">3</div><div class="l">Sample Artifacts</div></div>
-        <div class="stat"><div class="k">Monitoring + Reporting</div><div class="l">Workflow Type</div></div>
-        <div class="stat"><div class="k">CI + Tests</div><div class="l">Quality Baseline</div></div>
+        <div class="stat"><div class="k">Main Branch</div><div class="l">Deployment Source</div></div>
+        <div class="stat"><div class="k">Responsive UI</div><div class="l">Desktop + Mobile</div></div>
       </div>
     </section>
 
-    <section class="section-grid">
+    <section class="grid">
       <article class="card">
-        <h2>Run Locally</h2>
-        <div class="toolbar">
-          <p class="mono">Command</p>
-          <button class="copy" onclick="copyCmd()">Copy</button>
+        <h2>Run Command</h2>
+        <div class="toolrow">
+          <span class="mono">Local generation</span>
+          <button class="copy-btn" onclick="copyCommand()">Copy</button>
         </div>
-        <pre><code id="cmd" class="mono">.venv/bin/python src/build_price_report.py --input examples/prices.csv --output docs/samples --alert-threshold 10</code></pre>
+        <pre><code id="run-command" class="mono">.venv/bin/python src/build_price_report.py --input examples/prices.csv --output docs/samples --alert-threshold 10</code></pre>
         <p style="margin-top:10px;">Key outputs: <span class="mono">price_changes.csv, alerts.csv, weekly_report.md</span></p>
       </article>
 
       <article class="card">
-        <h2>Workflow Overview</h2>
-        <ul class="step-list">
-          <li class="step"><span class="n">1</span>Load structured input from <span class="mono">examples/</span>.</li>
-          <li class="step"><span class="n">2</span>Generate deterministic artifacts in <span class="mono">docs/samples/</span>.</li>
-          <li class="step"><span class="n">3</span>Share outputs via GitHub Pages and repo docs.</li>
+        <h2>Execution Flow</h2>
+        <ul class="steps">
+          <li class="step"><span class="num">1</span>Load deterministic input from <span class="mono">examples/</span>.</li>
+          <li class="step"><span class="num">2</span>Generate artifacts into <span class="mono">docs/samples/</span>.</li>
+          <li class="step"><span class="num">3</span>Publish and share via GitHub Pages.</li>
         </ul>
       </article>
     </section>
 
-    <section class="section-grid">
+    <section class="grid">
       <article class="card">
-        <h2>Documentation Hub</h2>
-        <ul class="doc-links">
+        <h2>Documentation</h2>
+        <ul class="docs">
           <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/README.md" target="_blank" rel="noreferrer">README</a></li>
           <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/AGENTS.md" target="_blank" rel="noreferrer">AGENTS</a></li>
           <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/PLAN.md" target="_blank" rel="noreferrer">PLAN</a></li>
@@ -358,33 +340,35 @@
 
       <article class="card">
         <h2>Artifact Explorer</h2>
-        <input id="filter" class="search" type="search" placeholder="Filter artifacts by file name..." oninput="filterArtifacts()" />
-        <ul id="artifacts" class="artifact-list">
-        <li class="artifact-item" data-path="samples/alerts.csv"><a href="./samples/alerts.csv">samples/alerts.csv</a></li>\n        <li class="artifact-item" data-path="samples/price_changes.csv"><a href="./samples/price_changes.csv">samples/price_changes.csv</a></li>\n        <li class="artifact-item" data-path="samples/weekly_report.md"><a href="./samples/weekly_report.md">samples/weekly_report.md</a></li>\n        </ul>
+        <input id="artifact-filter" class="search" type="search" placeholder="Filter by file name..." oninput="filterArtifacts()" />
+        <ul id="artifact-list" class="artifacts">
+            <li class="artifact-item" data-path="samples/alerts.csv"><a href="./samples/alerts.csv">samples/alerts.csv</a></li>
+            <li class="artifact-item" data-path="samples/price_changes.csv"><a href="./samples/price_changes.csv">samples/price_changes.csv</a></li>
+            <li class="artifact-item" data-path="samples/weekly_report.md"><a href="./samples/weekly_report.md">samples/weekly_report.md</a></li>
+        </ul>
       </article>
     </section>
 
     <footer class="footer">
-      Updated: 2026-04-23. This page is optimized for desktop/mobile and generated as a professional showcase surface.
+      Updated: 2026-04-23. Domain-specific UI theme applied for this project page.
     </footer>
   </main>
 
   <script>
-    function copyCmd() {
-      const text = document.getElementById('cmd').textContent;
-      navigator.clipboard.writeText(text).then(function () {
-        const btn = document.querySelector('.copy');
-        const old = btn.textContent;
+    function copyCommand() {
+      const text = document.getElementById('run-command').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        const prev = btn.textContent;
         btn.textContent = 'Copied';
-        setTimeout(function () { btn.textContent = old; }, 900);
+        setTimeout(() => { btn.textContent = prev; }, 950);
       });
     }
 
     function filterArtifacts() {
-      const q = document.getElementById('filter').value.toLowerCase().trim();
-      const items = document.querySelectorAll('.artifact-item');
-      items.forEach(function (el) {
-        const path = el.getAttribute('data-path').toLowerCase();
+      const q = document.getElementById('artifact-filter').value.toLowerCase().trim();
+      document.querySelectorAll('.artifact-item').forEach((el) => {
+        const path = (el.getAttribute('data-path') || '').toLowerCase();
         el.style.display = path.includes(q) ? '' : 'none';
       });
     }
