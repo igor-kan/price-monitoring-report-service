@@ -13,7 +13,7 @@
       --muted: #334155;
       --card: rgba(255,255,255,0.82);
       --line: rgba(15,23,42,0.14);
-      --shadow: 0 20px 45px rgba(15, 23, 42, 0.13);
+      --shadow: 0 20px 45px rgba(15,23,42,0.13);
       --radius: 18px;
       --accent: #0d9488;
       --accent2: #ea580c;
@@ -58,7 +58,7 @@
     body::after { width: 220px; height: 220px; bottom: 8%; right: -70px; background: var(--accent2); animation-delay: -4s; }
 
     @keyframes drift {
-      0%,100% { transform: translateY(0) translateX(0); }
+      0%, 100% { transform: translateY(0) translateX(0); }
       50% { transform: translateY(-18px) translateX(9px); }
     }
 
@@ -170,6 +170,13 @@
     .stat .k { font-size: 1.15rem; font-weight: 800; }
     .stat .l { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
+    .visual-gallery {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 14px;
+    }
+
     .grid {
       margin-top: 14px;
       display: grid;
@@ -185,11 +192,43 @@
       padding: 18px;
       backdrop-filter: blur(8px);
       animation: rise .55s ease both;
+      transition: transform .22s ease, box-shadow .22s ease;
     }
 
+    .card:hover { transform: translateY(-2px); box-shadow: 0 24px 48px rgba(15,23,42,0.16); }
     .card:nth-child(2) { animation-delay: .06s; }
     .card:nth-child(3) { animation-delay: .12s; }
     .card:nth-child(4) { animation-delay: .18s; }
+
+    .reveal { opacity: 0; transform: translateY(8px); }
+    .reveal.in { opacity: 1; transform: translateY(0); transition: opacity .45s ease, transform .45s ease; }
+
+    .visual-card { transform-style: preserve-3d; will-change: transform; }
+    .visual-card p { margin-bottom: 12px; }
+
+    .visual-wrap {
+      border-radius: 14px;
+      border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+      background: rgba(255,255,255,0.82);
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    .visual-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+    }
+
+    .visual-meta {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
 
     @keyframes rise {
       from { opacity: 0; transform: translateY(10px); }
@@ -244,7 +283,7 @@
       margin-right: 8px;
     }
 
-    .docs, .artifacts { margin: 0; padding-left: 18px; }
+    .docs, .artifacts { margin: 0; padding-left: 18px; max-height: 260px; overflow: auto; }
     .docs li, .artifacts li { margin: 6px 0; }
 
     .search {
@@ -274,7 +313,7 @@
     }
 
     @media (max-width: 900px) {
-      .grid { grid-template-columns: 1fr; }
+      .grid, .visual-gallery { grid-template-columns: 1fr; }
       .header { flex-direction: column; align-items: flex-start; }
     }
   </style>
@@ -289,7 +328,7 @@
       </div>
     </header>
 
-    <section class="hero">
+    <section class="hero reveal">
       <h1>price-monitoring-report-service</h1>
       <p class="subtitle">Price delta monitoring and weekly reporting generator.</p>
       <div class="chips">
@@ -304,18 +343,38 @@
       </div>
     </section>
 
+    <section class="visual-gallery">
+      <article class="card visual-card reveal" data-tilt>
+        <h2>Concept Hero</h2>
+        <p>Branded visual for this workflow and market positioning.</p>
+        <div class="visual-wrap">
+          <img loading="lazy" src="./assets/hero.svg" alt="Project hero illustration" />
+        </div>
+        <div class="visual-meta">Asset: docs/assets/hero.svg</div>
+      </article>
+
+      <article class="card visual-card reveal" data-tilt>
+        <h2>Interface Mockshot</h2>
+        <p>Service preview used for demos, outreach, and stakeholder walkthroughs.</p>
+        <div class="visual-wrap">
+          <img loading="lazy" src="./assets/mockshot.svg" alt="Project interface mockshot" />
+        </div>
+        <div class="visual-meta">Asset: docs/assets/mockshot.svg</div>
+      </article>
+    </section>
+
     <section class="grid">
-      <article class="card">
+      <article class="card reveal">
         <h2>Run Command</h2>
         <div class="toolrow">
           <span class="mono">Local generation</span>
-          <button class="copy-btn" onclick="copyCommand()">Copy</button>
+          <button class="copy-btn" onclick="copyCommand(this)">Copy</button>
         </div>
         <pre><code id="run-command" class="mono">.venv/bin/python src/build_price_report.py --input examples/prices.csv --output docs/samples --alert-threshold 10</code></pre>
         <p style="margin-top:10px;">Key outputs: <span class="mono">price_changes.csv, alerts.csv, weekly_report.md</span></p>
       </article>
 
-      <article class="card">
+      <article class="card reveal">
         <h2>Execution Flow</h2>
         <ul class="steps">
           <li class="step"><span class="num">1</span>Load deterministic input from <span class="mono">examples/</span>.</li>
@@ -326,19 +385,19 @@
     </section>
 
     <section class="grid">
-      <article class="card">
-        <h2>Documentation</h2>
+      <article class="card reveal">
+        <h2>Documentation Hub</h2>
         <ul class="docs">
-          <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/README.md" target="_blank" rel="noreferrer">README</a></li>
-          <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/AGENTS.md" target="_blank" rel="noreferrer">AGENTS</a></li>
-          <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/PLAN.md" target="_blank" rel="noreferrer">PLAN</a></li>
-          <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/TASKS.md" target="_blank" rel="noreferrer">TASKS</a></li>
-          <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/RESEARCH.md" target="_blank" rel="noreferrer">RESEARCH</a></li>
-          <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/LEARNING_PATH.md" target="_blank" rel="noreferrer">LEARNING_PATH</a></li>
+            <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/AGENTS.md" target="_blank" rel="noreferrer">AGENTS.md</a></li>
+            <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/LEARNING_PATH.md" target="_blank" rel="noreferrer">LEARNING_PATH.md</a></li>
+            <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/PLAN.md" target="_blank" rel="noreferrer">PLAN.md</a></li>
+            <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/README.md" target="_blank" rel="noreferrer">README.md</a></li>
+            <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/RESEARCH.md" target="_blank" rel="noreferrer">RESEARCH.md</a></li>
+            <li><a href="https://github.com/igor-kan/price-monitoring-report-service/blob/main/TASKS.md" target="_blank" rel="noreferrer">TASKS.md</a></li>
         </ul>
       </article>
 
-      <article class="card">
+      <article class="card reveal">
         <h2>Artifact Explorer</h2>
         <input id="artifact-filter" class="search" type="search" placeholder="Filter by file name..." oninput="filterArtifacts()" />
         <ul id="artifact-list" class="artifacts">
@@ -350,28 +409,67 @@
     </section>
 
     <footer class="footer">
-      Updated: 2026-04-23. Domain-specific UI theme applied for this project page.
+      Updated: 2026-04-23. Domain-specific UI theme plus custom SVG visuals applied for this project page.
     </footer>
   </main>
 
   <script>
-    function copyCommand() {
+    function copyCommand(btn) {
       const text = document.getElementById('run-command').textContent;
       navigator.clipboard.writeText(text).then(() => {
-        const btn = document.querySelector('.copy-btn');
         const prev = btn.textContent;
         btn.textContent = 'Copied';
-        setTimeout(() => { btn.textContent = prev; }, 950);
+        setTimeout(function () { btn.textContent = prev; }, 950);
       });
     }
 
     function filterArtifacts() {
       const q = document.getElementById('artifact-filter').value.toLowerCase().trim();
-      document.querySelectorAll('.artifact-item').forEach((el) => {
+      document.querySelectorAll('.artifact-item').forEach(function (el) {
         const path = (el.getAttribute('data-path') || '').toLowerCase();
         el.style.display = path.includes(q) ? '' : 'none';
       });
     }
+
+    function initVisualTilt() {
+      const cards = document.querySelectorAll('[data-tilt]');
+      cards.forEach(function (card) {
+        card.addEventListener('pointermove', function (event) {
+          const rect = card.getBoundingClientRect();
+          const px = (event.clientX - rect.left) / rect.width;
+          const py = (event.clientY - rect.top) / rect.height;
+          const rx = (0.5 - py) * 4;
+          const ry = (px - 0.5) * 6;
+          card.style.transform = 'translateY(-4px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+        });
+
+        card.addEventListener('pointerleave', function () {
+          card.style.transform = '';
+        });
+      });
+    }
+
+    function initReveal() {
+      const items = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        items.forEach(function (el) { el.classList.add('in'); });
+        return;
+      }
+
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.16 });
+
+      items.forEach(function (el) { observer.observe(el); });
+    }
+
+    initVisualTilt();
+    initReveal();
   </script>
 </body>
 </html>
