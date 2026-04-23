@@ -1,0 +1,4 @@
+sku,vendor,current_price,previous_price,currency
+SKU-1001,VendorA,49.99,44.99,USD
+SKU-1002,VendorB,19.50,25.00,USD
+SKU-1003,VendorC,120.00,100.00,USD
